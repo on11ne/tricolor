@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- SQL XML created by WWW SQL Designer, http://code.google.com/p/wwwsqldesigner/ -->
-<!-- Active URL: file:///C:/temp/install/wwwsqldesigner-2.7/index.html -->
+<!-- Active URL: file:///C:/Temp/install/wwwsqldesigner-2.7/wwwsqldesigner-2.7/index.html -->
 <sql>
     <datatypes db="mysql">
         <group label="Numeric" color="rgb(238,238,170)">
@@ -121,6 +121,20 @@
         <row name="genre_id" null="0" autoincrement="0">
             <datatype>INT(10)</datatype>
             <relation table="tbl_genres" row="id" />
+        </row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+    </table>
+    <table x="519" y="224" name="tbl_schedule_uploader">
+        <row name="id" null="0" autoincrement="1">
+            <datatype>INT(10)</datatype>
+        </row>
+        <row name="filename" null="0" autoincrement="0">
+            <datatype>VARCHAR(255)</datatype>
+        </row>
+        <row name="created" null="0" autoincrement="0">
+            <datatype>TIMESTAMP</datatype>
         </row>
         <key type="PRIMARY" name="">
             <part>id</part>

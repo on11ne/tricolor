@@ -51,6 +51,7 @@ $cs->registerCssFile($baseUrl.'/js/fancybox/jquery.fancybox-1.3.1.css');
                     array('label'=>'Экраны', 'url'=>array('hall/admin')),
                     array('label'=>'Показы', 'url'=>array('item/admin')),
                     array('label'=>'Расписание', 'url'=>array('schedule/admin')),
+                    array('label'=>'Загрузка', 'url'=>array('scheduleUploader/create')),
                     array('label'=>'Выйти ('.Yii::app()->user->name.')', 'url'=>array('/gii/default/logout'))
                 ),
             )); ?>

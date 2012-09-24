@@ -12,7 +12,7 @@
 -- ---
 
 DROP TABLE IF EXISTS `tbl_items`;
-
+		
 CREATE TABLE `tbl_items` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
@@ -32,11 +32,11 @@ CREATE TABLE `tbl_items` (
 -- ---
 
 DROP TABLE IF EXISTS `tbl_schedule`;
-
+		
 CREATE TABLE `tbl_schedule` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `item_id` INT(10) NOT NULL,
-  `hall_id` INT(10) NOT NULL,
+  `hall_id` INT NOT NULL,
   `start_date_time` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -47,7 +47,7 @@ CREATE TABLE `tbl_schedule` (
 -- ---
 
 DROP TABLE IF EXISTS `tbl_genres`;
-
+		
 CREATE TABLE `tbl_genres` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
@@ -60,9 +60,9 @@ CREATE TABLE `tbl_genres` (
 -- ---
 
 DROP TABLE IF EXISTS `tbl_halls`;
-
+		
 CREATE TABLE `tbl_halls` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -73,11 +73,25 @@ CREATE TABLE `tbl_halls` (
 -- ---
 
 DROP TABLE IF EXISTS `tbl_genres_items`;
-
+		
 CREATE TABLE `tbl_genres_items` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `item_id` INT(10) NOT NULL,
   `genre_id` INT(10) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'tbl_schedule_uploader'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `tbl_schedule_uploader`;
+		
+CREATE TABLE `tbl_schedule_uploader` (
+  `id` INT(10) NOT NULL AUTO_INCREMENT,
+  `filename` VARCHAR(255) NOT NULL,
+  `created` TIMESTAMP NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -99,6 +113,7 @@ ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (genre_id) REFERENCES `tbl_genres
 -- ALTER TABLE `tbl_genres` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `tbl_halls` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `tbl_genres_items` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `tbl_schedule_uploader` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ---
 -- Test Data
@@ -113,4 +128,6 @@ ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (genre_id) REFERENCES `tbl_genres
 -- INSERT INTO `tbl_halls` (`id`,`title`) VALUES
 -- ('','');
 -- INSERT INTO `tbl_genres_items` (`id`,`item_id`,`genre_id`) VALUES
+-- ('','','');
+-- INSERT INTO `tbl_schedule_uploader` (`id`,`filename`,`created`) VALUES
 -- ('','','');

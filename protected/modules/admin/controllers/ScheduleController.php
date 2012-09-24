@@ -128,6 +128,24 @@ class ScheduleController extends Controller
 		));
 	}
 
+    /**
+     * Uploads new schedule.
+     */
+    public function actionUpload()
+    {
+
+        if(isset($_POST['Schedule']))
+        {
+            $model->attributes=$_POST['Schedule'];
+            if($model->save())
+                $this->redirect(array('view','id'=>$model->id));
+        }
+
+        $this->render('upload',array(
+            'model'=>$model,
+        ));
+    }
+
 	/**
 	 * Manages all models.
 	 */

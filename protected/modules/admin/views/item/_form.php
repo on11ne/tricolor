@@ -53,7 +53,7 @@
 
     <div class="row">
         <?php echo $form->labelEx($model,'genres'); ?>
-        <?php echo $form->textField($model,'genres'); ?>
+        <?php echo $form->checkBoxList($model,'genres', array()); ?>
         <?php echo $form->error($model,'genres'); ?>
     </div>
 
