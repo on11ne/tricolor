@@ -35,21 +35,29 @@ class ScheduleUploader extends CActiveRecord
         $inputFileType = 'Excel5';
         $inputFileName = Yii::getPathOfAlias('webroot') . $this->filename;
 
-        $objPHPExcel = new PHPExcel();
+        try {
 
-        $message = 'Загрузка файла ' . pathinfo($inputFileName, PATHINFO_BASENAME) . ' типа ' . $inputFileType . '<br />';
+            new PHPExcel();
 
-        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 
-        $objReader->setLoadAllSheets();
-        $objPHPExcel = $objReader->load($inputFileName);
+            $objReader->setLoadAllSheets();
+            $objPHPExcel = $objReader->load($inputFileName);
 
-        $loadedSheetNames = $objPHPExcel->getSheetNames();
+            $loadedSheetNames = $objPHPExcel->getSheetNames();
+        } catch (Exception $ex) {
 
-        foreach($loadedSheetNames as $sheetIndex => $loadedSheetName) {
+            $this->addError('filename', 'Не возможно обработать xls файл, проверьте формат');
+            return false;
+        }
+
+
+        foreach($loadedSheetNames as $loadedSheetName) {
 
             $year = date("Y"); list($day, $month) = explode(".", $loadedSheetName);
             if(!checkdate($month, $day, $year)) continue;
+
+            $message = 'Результаты загрузки<br/>';
 
             $objPHPExcel->setActiveSheetIndexByName($loadedSheetName);
 
@@ -58,9 +66,9 @@ class ScheduleUploader extends CActiveRecord
             foreach(array_merge(range('B', 'M'), range('O', 'Z')) as $letter) {
                 foreach(range(2, 97) as $number) {
 
-                    $cell_content = $objPHPExcel->getActiveSheet()->getCell($letter.$number)->getValue();
+                    $film_title = $objPHPExcel->getActiveSheet()->getCell($letter.$number)->getValue();
 
-                    if(strlen($cell_content) > 1) {
+                    if(strlen($film_title) > 1) {
 
                         $minutes_from_midnight = ($number - 2) * 15;
                         $current_time = mktime(
@@ -72,21 +80,30 @@ class ScheduleUploader extends CActiveRecord
                             $year
                         );
 
-                        $message .= 'loaded film ' . $cell_content . ' at ' . date("Y-m-d H:i:s", $current_time) . ' in hall ' . $hall_id . "<br />";
-                    }
+                        $item = Item::model()->find('title=:t', array(':t' => $film_title));
 
+                        if(is_null($item)) {
+
+                            $message .= 'Название фильма ' . $film_title . " не найдено<br/>";
+                        } else {
+
+                            $schedule_item = new Schedule();
+                            $schedule_item->hall_id = $hall_id;
+
+                            $schedule_item->item_id = $item->id;
+                            $schedule_item->start_date_time = date("Y-m-d H:i:s", $current_time);
+
+                            if(!$schedule_item->save())
+                                $message .= 'Ошибка сохранения сеанса ' . var_export($schedule_item->getErrors(), true) . " не найдено<br/>";
+                        }
+                    }
                     $time_id++;
                 }
                 $hall_id++;
             }
-
-//            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-
-            $message .= $sheetIndex . ' -> ' . $loadedSheetName . '<br /><br />';
-            break;
         }
 
-        Yii::app()->user->setFlash("success", $message);
+        Yii::app()->user->setFlash('message', $message);
 
         return true;
     }

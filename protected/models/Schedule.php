@@ -43,6 +43,11 @@ class Schedule extends CActiveRecord
 		return array(
 			array('item_id, hall_id, start_date_time', 'required'),
 			array('item_id, hall_id', 'numerical', 'integerOnly'=>true),
+
+            array('item_id', 'exist', 'className' => 'Item', 'attributeName' => 'id'),
+            array('hall_id', 'exist', 'className' => 'Hall', 'attributeName' => 'id'),
+            array('start_date_time', 'unique', 'className' => 'Schedule', 'attributeName' => 'start_date_time'),
+
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, item_id, hall_id, start_date_time', 'safe', 'on'=>'search'),
@@ -68,6 +73,7 @@ class Schedule extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+
 			'id' => 'ID',
 			'item_id' => 'Название',
 			'hall_id' => 'Экран',

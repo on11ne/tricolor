@@ -69,19 +69,8 @@
 		<?php echo $form->error($model,'created'); ?>
 	</div>
 
-    <div class="row">
-    <?php $this->widget('application.extensions.appendo.JAppendo',array(
-        'id' => 'schedule',
-        'model' => $model,
-        'maxRows' => 10,
-        'labelAdd' => 'Добавить показ',
-        'allowDelete' => true,
-        'viewName' => 'application.modules.admin.views.item._schedule_item',
-    )); ?>
-    </div>
-
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
