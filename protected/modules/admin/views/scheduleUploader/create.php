@@ -3,16 +3,16 @@
 /* @var $model ScheduleUploader */
 
 $this->breadcrumbs=array(
-	'Schedule Uploaders'=>array('index'),
-	'Create',
+	'Загрузка расписания'=>array('index'),
+	'Форма загрузки',
 );
 
 $this->menu=array(
-	array('label'=>'List ScheduleUploader', 'url'=>array('index')),
-	array('label'=>'Manage ScheduleUploader', 'url'=>array('admin')),
+	array('label'=>'Список расписаний', 'url'=>array('index')),
+	array('label'=>'Управление списком', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Create ScheduleUploader</h1>
+<h1>Загрузить расписание</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model' => $model)); ?>

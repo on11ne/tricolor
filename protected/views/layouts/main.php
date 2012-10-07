@@ -1,59 +1,53 @@
-<?php /* @var $this Controller */ ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
+    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/assets/css/style.css">
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
-
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
-
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+<?php
+    Yii::app()->clientScript->registerCoreScript('jquery');
+    Yii::app()->clientScript->registerCoreScript('jqueryui');
+    Yii::app()->clientScript->registerCoreScript('poshytip');
+    Yii::app()->clientScript->registerCoreScript('jcarousel');
+    Yii::app()->clientScript->registerScriptFile('/assets/js/script.js', CClientScript::POS_BEGIN);
+    Yii::app()->clientScript->registerScriptFile('/assets/js/swfobject.js', CClientScript::POS_BEGIN);
+    Yii::app()->clientScript->registerScriptFile('/assets/js/URI.js', CClientScript::POS_BEGIN);
+?>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 </head>
-
 <body>
+<div class="wrap-all">
+<!-- main -->
+<div class="main">
+<!--  header  -->
+<header>
+    <a href="/"><img class="logo" src="/assets/images/logo.png" width="425" height="87" alt=""></a>
+    <ul class="tsoc">
+        <li><a href="#"><img src="/assets/images/tsoc1.png" width="30" height="30" alt=""></a></li>
+        <li><a href="#"><img src="/assets/images/tsoc2.png" width="30" height="30" alt=""></a></li>
+        <li><a href="#"><img src="/assets/images/tsoc3.png" width="30" height="30" alt=""></a></li>
+        <li><a href="#"><img src="/assets/images/tsoc4.png" width="30" height="30" alt=""></a></li>
+    </ul>
+    <a class="btn-set" href="#">Как настроить «Кинозалы «Триколор ТВ»?</a>
+</header><!-- end header -->
+<!--  content  -->
 
-<div class="container" id="page">
+<?php echo $content; ?>
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
 
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
+<div class="sub-footer"></div>
+</div><!-- end main -->
+</div>
 
-	<?php echo $content; ?>
-
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
-
-</div><!-- page -->
+<!--  footer -->
+<footer><div class="foot-in">
+    <div class="copyright">&copy; ЗАО "Национальная спутниковая компания"<br>г. Санкт-Петербург, 197022, а/я 170<br><a href="#">Служба поддержки абонентов</a></div>
+    <div class="support">Служба поддержки абонентов: отправить заявку<br>Помощь дилерам: <a href="mailto:dealer@tricolor.tv">dealer@tricolor.tv</a><br>Ваши предложения и замечания: <a href="mailto:otzyv@tricolor.tv">otzyv@tricolor.tv</a></div>
+    <div class="market">По вопросам размещения рекламы на ресурсах<br>«Триколор ТВ»: <a href="mailto:info@agency2.su">info@agency2.su</a></div>
+</div></footer><!-- end footer -->
 
 </body>
 </html>

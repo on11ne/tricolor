@@ -3,20 +3,20 @@
 /* @var $model Genre */
 
 $this->breadcrumbs=array(
-	'Genres'=>array('index'),
+	'Жанры'=>array('index'),
 	$model->title,
 );
 
 $this->menu=array(
-	array('label'=>'List Genre', 'url'=>array('index')),
-	array('label'=>'Create Genre', 'url'=>array('create')),
-	array('label'=>'Update Genre', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Genre', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Genre', 'url'=>array('admin')),
+	array('label'=>'Список жанров', 'url'=>array('index')),
+	array('label'=>'Создать жанр', 'url'=>array('create')),
+	array('label'=>'Изменить жанр', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>'Удалить жанр', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Управление списком', 'url'=>array('admin')),
 );
 ?>
 
-<h1>View Genre #<?php echo $model->id; ?></h1>
+<h1>Просмотр жанра #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

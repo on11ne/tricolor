@@ -5,43 +5,59 @@
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+    <table>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</td>
+            <td><?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('title')); ?>:</td>
+            <td><?php echo CHtml::encode($data->title); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('teaser_image')); ?>:</td>
+            <td><?php echo CHtml::image('/images/items/teasers/' . $data->teaser_image, "image") ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('index_teaser_image')); ?>:</td>
+            <td><?php echo CHtml::image('/images/items/index_teasers/' . $data->index_teaser_image, "image") ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('slider_teaser_image')); ?>:</td>
+            <td><?php echo CHtml::image('/images/items/slider_teasers/' . $data->slider_teaser_image, "image") ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('teaser_text')); ?>:</td>
+            <td><?php echo CHtml::encode($data->teaser_text); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('genres')); ?>:</td>
+            <td><?php
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('title')); ?>:</b>
-	<?php echo CHtml::encode($data->title); ?>
-	<br />
+                if(count($data->genres)) {
+                    foreach($data->genres as $genre) {
+                        echo CHtml::encode($genre->title) . "&nbsp;";
+                    }
+                }
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('teaser_image')); ?>:</b>
-	<?php echo CHtml::encode($data->teaser_image); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('index_teaser_image')); ?>:</b>
-	<?php echo CHtml::encode($data->index_teaser_image); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('teaser_text')); ?>:</b>
-	<?php echo CHtml::encode($data->teaser_text); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('trailer')); ?>:</b>
-	<?php echo CHtml::encode($data->trailer); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
-	<?php echo CHtml::encode($data->description); ?>
-	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('order')); ?>:</b>
-	<?php echo CHtml::encode($data->order); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created')); ?>:</b>
-	<?php echo CHtml::encode($data->created); ?>
-	<br />
-
-	*/ ?>
+                ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('trailer')); ?>:</td>
+            <td><?php echo CHtml::encode($data->trailer); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</td>
+            <td><?php echo CHtml::encode($data->description); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('order')); ?>:</td>
+            <td><?php echo CHtml::encode($data->order); ?></td>
+        </tr>
+        <tr>
+            <td><?php echo CHtml::encode($data->getAttributeLabel('created')); ?>:</td>
+            <td><?php echo CHtml::encode($data->created); ?></td>
+        </tr>
+    </table>
 
 </div>

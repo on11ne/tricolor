@@ -7,14 +7,14 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Item', 'url'=>array('create')),
-	array('label'=>'Manage Item', 'url'=>array('admin')),
+	array('label'=>'Создать показ', 'url'=>array('create')),
+	array('label'=>'Управление списком', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Items</h1>
+<h1>Показы</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
+	'dataProvider' => $dataProvider,
+	'itemView' => '_view',
 )); ?>

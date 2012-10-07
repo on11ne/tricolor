@@ -1,24 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "tbl_schedule".
+ * This is the model class for table "tbl_schedule_premiere".
  *
- * The followings are the available columns in table 'tbl_schedule':
+ * The followings are the available columns in table 'tbl_schedule_premiere':
  * @property integer $id
  * @property integer $item_id
- * @property integer $hall_id
  * @property string $start_date_time
  *
  * The followings are the available model relations:
- * @property TblHalls $hall
- * @property TblItems $item
+ * @property TblItems $tblItems
  */
-class Schedule extends CActiveRecord
+class SchedulePremiere extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Schedule the static model class
+	 * @return SchedulePremiere the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -30,7 +28,7 @@ class Schedule extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'tbl_schedule';
+		return 'tbl_schedule_premiere';
 	}
 
 	/**
@@ -41,16 +39,15 @@ class Schedule extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('item_id, hall_id, start_date_time', 'required'),
-			array('item_id, hall_id', 'numerical', 'integerOnly'=>true),
+			array('item_id, start_date_time', 'required'),
+			array('item_id', 'numerical', 'integerOnly'=>true),
 
             array('item_id', 'exist', 'className' => 'Item', 'attributeName' => 'id'),
-            array('hall_id', 'exist', 'className' => 'Hall', 'attributeName' => 'id'),
-            array('start_date_time', 'unique', 'className' => 'Schedule', 'attributeName' => 'start_date_time'),
+            array('start_date_time', 'unique', 'className' => 'SchedulePremiere', 'attributeName' => 'start_date_time'),
 
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, item_id, hall_id, start_date_time', 'safe', 'on'=>'search'),
+			array('id, item_id, start_date_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,7 +59,6 @@ class Schedule extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'hall' => array(self::BELONGS_TO, 'Hall', 'hall_id'),
 			'item' => array(self::BELONGS_TO, 'Item', 'item_id'),
 		);
 	}
@@ -73,13 +69,10 @@ class Schedule extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-
 			'id' => 'ID',
-			'item_id' => 'Название',
-			'hall_id' => 'Экран',
+			'item_id' => 'Показ',
             'item' => 'Показ',
-            'hall' => 'Экран',
-			'start_date_time' => 'Начало сеанса',
+			'start_date_time' => 'Дата премьеры',
 		);
 	}
 
@@ -96,7 +89,6 @@ class Schedule extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('item_id',$this->item_id);
-		$criteria->compare('hall_id',$this->hall_id);
 		$criteria->compare('start_date_time',$this->start_date_time,true);
 
 		return new CActiveDataProvider($this, array(

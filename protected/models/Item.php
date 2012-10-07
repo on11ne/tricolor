@@ -46,9 +46,10 @@ class Item extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, teaser_image, index_teaser_image, teaser_text, trailer, description, order, created', 'required'),
-			array('order', 'numerical', 'integerOnly'=>true),
-			array('title, teaser_image, index_teaser_image, trailer', 'length', 'max'=>255),
+			array('title, teaser_text, trailer, description, created', 'required'),
+			array('order', 'numerical', 'integerOnly' => true),
+			array('title, teaser_image, index_teaser_image, trailer', 'length', 'max' => 255),
+            array('index_teaser_image, teaser_image, slider_teaser_image', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true, 'on' => 'update'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, title, teaser_image, index_teaser_image, teaser_text, trailer, description, order, created', 'safe', 'on'=>'search'),
@@ -63,7 +64,7 @@ class Item extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'genres' => array(self::MANY_MANY, 'Genre', 'tbl_genres_items(genre_id, item_id)'),
+			'genres' => array(self::MANY_MANY, 'Genre', 'tbl_genres_items(item_id ,genre_id)'),
 			'schedules' => array(self::HAS_MANY, 'Schedule', 'item_id'),
 		);
 	}
@@ -78,6 +79,7 @@ class Item extends CActiveRecord
 			'title' => 'Название',
 			'teaser_image' => 'Изображение',
 			'index_teaser_image' => 'Изображение на главной',
+            'slider_teaser_image' => 'Изображение в слайдере видео',
 			'teaser_text' => 'Вступительный текст',
 			'trailer' => 'YouTube адрес',
 			'description' => 'Описание',
@@ -116,5 +118,34 @@ class Item extends CActiveRecord
     public function behaviors(){
         return array( 'CAdvancedArBehavior' => array(
             'class' => 'application.extensions.CAdvancedArBehavior'));
+    }
+
+    public function resize($upload_directory, $width, $height) {
+
+        // creating thumb
+
+        if(!($original = Yii::app()->image->load($upload_directory)))
+            return false;
+
+        $original->resize($width, $height, Image::WIDTH);
+        $original->crop($width, $height);
+
+        if(!$original->save($upload_directory))
+            return false;
+
+        return true;
+    }
+
+    public function renderGenres($data) {
+
+        $genres = null;
+
+        if(count($data)) {
+            foreach($data as $genre) {
+                $genres .= CHtml::encode($genre->title) . "<br/>";
+            }
+        }
+
+        return $genres;
     }
 }

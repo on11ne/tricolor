@@ -16,6 +16,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+        'application.helpers.*',
         'application.extensions.CAdvancedArBehavior'
 	),
 
@@ -36,6 +37,14 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
+        'image'=>array(
+            'class'=>'application.extensions.image.CImageComponent',
+            // GD or ImageMagick
+            'driver' => 'GD',
+            // ImageMagick setup path
+            'params' => array('directory'=>'/opt/local/bin'),
+        ),
+
 		// uncomment the following to enable URLs in path-format
 		/*
 		'urlManager'=>array(
@@ -79,6 +88,46 @@ return array(
 				*/
 			),
 		),
+        'clientScript'=>array(
+            'packages'=>array(
+                'fancybox' => array(
+                    'baseUrl'=>'/assets/fancybox',
+                    'js' => array(
+                        'source/jquery.fancybox.pack.js',
+                        'lib/jquery.mousewheel-3.0.6.pack.js',
+                        'source/helpers/jquery.fancybox-buttons.js',
+                        'source/helpers/jquery.fancybox-media.js',
+                        'source/helpers/jquery.fancybox-thumbs.js',
+                    ),
+                    'css' => array(
+                        'source/jquery.fancybox.css',
+                        'source/helpers/jquery.fancybox-buttons.css',
+                        'source/helpers/jquery.fancybox-thumbs.css',
+                    ),
+                ),
+                'jqueryui' => array(
+                    'baseUrl'=>'/assets/js',
+                    'js' => array(
+                        'jquery-ui.min.js'
+                    ),
+                    'depends' => array('jquery')
+                ),
+                'jcarousel' => array(
+                    'baseUrl'=>'/assets/js',
+                    'js' => array(
+                        'jquery.jcarousel.min.js'
+                    ),
+                    'depends' => array('jquery')
+                ),
+                'poshytip' => array(
+                    'baseUrl'=>'/assets/js',
+                    'js' => array(
+                        'jquery.poshytip.min.js'
+                    ),
+                    'depends' => array('jquery')
+                ),
+            ),
+        ),
 	),
 
 	// application-level parameters that can be accessed

@@ -13,6 +13,10 @@
 	<?php echo CHtml::encode($data->filename); ?>
 	<br />
 
+    <b><?php echo CHtml::encode($data->getAttributeLabel('type')); ?>:</b>
+    <?php echo CHtml::encode($data->type); ?>
+    <br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created')); ?>:</b>
 	<?php echo CHtml::encode($data->created); ?>
 	<br />

@@ -91,7 +91,22 @@ DROP TABLE IF EXISTS `tbl_schedule_uploader`;
 CREATE TABLE `tbl_schedule_uploader` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `filename` VARCHAR(255) NOT NULL,
+  `type` TINYINT NOT NULL,
   `created` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'tbl_schedule_premieres'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `tbl_schedule_premieres`;
+		
+CREATE TABLE `tbl_schedule_premieres` (
+  `id` INT(10) NOT NULL AUTO_INCREMENT,
+  `item_id` INT(10) NOT NULL,
+  `start_date_time` DATE NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -99,6 +114,7 @@ CREATE TABLE `tbl_schedule_uploader` (
 -- Foreign Keys 
 -- ---
 
+ALTER TABLE `tbl_items` ADD FOREIGN KEY (id) REFERENCES `tbl_schedule_premieres` (`id`);
 ALTER TABLE `tbl_schedule` ADD FOREIGN KEY (item_id) REFERENCES `tbl_items` (`id`);
 ALTER TABLE `tbl_schedule` ADD FOREIGN KEY (hall_id) REFERENCES `tbl_halls` (`id`);
 ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (item_id) REFERENCES `tbl_items` (`id`);
@@ -114,6 +130,7 @@ ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (genre_id) REFERENCES `tbl_genres
 -- ALTER TABLE `tbl_halls` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `tbl_genres_items` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `tbl_schedule_uploader` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `tbl_schedule_premieres` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ---
 -- Test Data
@@ -129,5 +146,7 @@ ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (genre_id) REFERENCES `tbl_genres
 -- ('','');
 -- INSERT INTO `tbl_genres_items` (`id`,`item_id`,`genre_id`) VALUES
 -- ('','','');
--- INSERT INTO `tbl_schedule_uploader` (`id`,`filename`,`created`) VALUES
+-- INSERT INTO `tbl_schedule_uploader` (`id`,`filename`,`type`,`created`) VALUES
+-- ('','','','');
+-- INSERT INTO `tbl_schedule_premieres` (`id`,`item_id`,`start_date_time`) VALUES
 -- ('','','');

@@ -12,18 +12,24 @@
     'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">Поля, отмеченные <span class="required">*</span>, обязательны.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'filename'); ?>
-		<?php echo $form->fileField($model,'filename'); ?>
-		<?php echo $form->error($model,'filename'); ?>
+		<?php echo $form->labelEx($model, 'filename'); ?>
+		<?php echo $form->fileField($model, 'filename'); ?>
+		<?php echo $form->error($model, 'filename'); ?>
 	</div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model, 'type'); ?>
+        <?php echo $form->listBox($model, 'type', array('schedule' => 'Расписание сеансов', 'premieres' => 'Премьеры')); ?>
+        <?php echo $form->error($model, 'type'); ?>
+    </div>
+
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton('Загрузка'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

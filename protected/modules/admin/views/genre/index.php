@@ -3,16 +3,16 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Genres',
+	'Жанры',
 );
 
 $this->menu=array(
-	array('label'=>'Create Genre', 'url'=>array('create')),
-	array('label'=>'Manage Genre', 'url'=>array('admin')),
+	array('label' => 'Создать жанр', 'url'=>array('create')),
+	array('label' => 'Управление списком', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Genres</h1>
+<h1>Жанры</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

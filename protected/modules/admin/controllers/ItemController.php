@@ -62,23 +62,76 @@ class ItemController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Item;
+		$model = new Item;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Item']))
-		{
-			$model->attributes = $_POST['Item'];
+		if(isset($_POST['Item'])) {
 
-            // todo: add schedules
+			$model->attributes = $_POST['Item'];
+            $model->genres = $_POST['Item']['genres'];
+
+            $model->index_teaser_image = CUploadedFile::getInstance($model, 'index_teaser_image');
+
+            if($model->index_teaser_image) {
+
+                $image_name = uniqid() . "." . pathinfo($model->index_teaser_image, PATHINFO_EXTENSION);
+
+                $upload_directory = Yii::getPathOfAlias('webroot') . '/images/items/index_teasers/' . $image_name;
+//                $web_directory = '/images/items/index_teasers/' . $image_name;
+
+                if(!$model->index_teaser_image->saveAs($upload_directory))
+                    $model->addError('index_teaser_image', 'Фотография не может быть сохранена');
+
+                if(!$model->resize($upload_directory, 166, 247))
+                    $model->addError('index_teaser_image', 'Невозможно обработать изображение');
+
+                $model->index_teaser_image = $image_name;
+            }
+
+            $model->teaser_image = CUploadedFile::getInstance($model, 'teaser_image');
+
+            if($model->teaser_image) {
+
+                $image_name = uniqid() . "." . pathinfo($model->teaser_image, PATHINFO_EXTENSION);
+
+                $upload_directory = Yii::getPathOfAlias('webroot') . '/images/items/teasers/' . $image_name;
+//                $web_directory = '/images/items/teasers/' . $image_name;
+
+                if(!$model->teaser_image->saveAs($upload_directory))
+                    $model->addError('teaser_image', 'Фотография не может быть сохранена');
+
+                if(!$model->resize($upload_directory, 326, 488))
+                    $model->addError('teaser_image', 'Невозможно обработать изображение');
+
+                $model->teaser_image = $image_name;
+            }
+
+            $model->slider_teaser_image = CUploadedFile::getInstance($model, 'slider_teaser_image');
+
+            if($model->slider_teaser_image) {
+
+                $image_name = uniqid() . "." . pathinfo($model->slider_teaser_image, PATHINFO_EXTENSION);
+
+                $upload_directory = Yii::getPathOfAlias('webroot') . '/images/items/slider_teasers/' . $image_name;
+//                $web_directory = '/images/items/slider_teasers/' . $image_name;
+
+                if(!$model->slider_teaser_image->saveAs($upload_directory))
+                    $model->addError('slider_teaser_image', 'Фотография не может быть сохранена');
+
+                if(!$model->resize($upload_directory, 426, 233))
+                    $model->addError('slider_teaser_image', 'Невозможно обработать изображение');
+
+                $model->slider_teaser_image = $image_name;
+            }
 
 			if($model->save())
 				$this->redirect(array('view','id' => $model->id));
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
+		$this->render('create', array(
+			'model' => $model,
 		));
 	}
 
@@ -89,7 +142,7 @@ class ItemController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -99,12 +152,63 @@ class ItemController extends Controller
 			$model->attributes = $_POST['Item'];
             $model->genres = $_POST['Item']['genres'];
 
+            if(CUploadedFile::getInstance($model, 'index_teaser_image')) {
+
+                $model->index_teaser_image = CUploadedFile::getInstance($model, 'index_teaser_image');
+
+                $image_name = uniqid() . "." . pathinfo($model->index_teaser_image, PATHINFO_EXTENSION);
+
+                $upload_directory = Yii::getPathOfAlias('webroot') . '/images/items/index_teasers/' . $image_name;
+                $web_directory = '/images/items/index_teasers/' . $image_name;
+
+                if(!$model->index_teaser_image->saveAs($upload_directory))
+                    $model->addError('index_teaser_image', 'Фотография не может быть сохранена');
+
+                if(!$model->resize($upload_directory, 166, 247))
+                    $model->addError('index_teaser_image', 'Невозможно обработать изображение');
+
+                $model->index_teaser_image = $image_name;
+            }
+
+            if(CUploadedFile::getInstance($model, 'teaser_image')) {
+
+                $model->teaser_image = CUploadedFile::getInstance($model, 'teaser_image');
+                $image_name = uniqid() . "." . pathinfo($model->teaser_image, PATHINFO_EXTENSION);
+
+                $upload_directory = Yii::getPathOfAlias('webroot') . '/images/items/teasers/' . $image_name;
+//                $web_directory = '/images/items/teasers/' . $image_name;
+
+                if(!$model->teaser_image->saveAs($upload_directory))
+                    $model->addError('teaser_image', 'Фотография не может быть сохранена');
+
+                if(!$model->resize($upload_directory, 326, 488))
+                    $model->addError('teaser_image', 'Невозможно обработать изображение');
+
+                $model->teaser_image = $image_name;
+            }
+
+            if(CUploadedFile::getInstance($model, 'slider_teaser_image')) {
+
+                $model->slider_teaser_image = CUploadedFile::getInstance($model, 'slider_teaser_image');
+
+                $image_name = uniqid() . "." . pathinfo($model->slider_teaser_image, PATHINFO_EXTENSION);
+
+                $upload_directory = Yii::getPathOfAlias('webroot') . '/images/items/slider_teasers/' . $image_name;
+//                $web_directory = '/images/items/slider_teasers/' . $image_name;
+
+                if(!$model->slider_teaser_image->saveAs($upload_directory))
+                    $model->addError('slider_teaser_image', 'Фотография не может быть сохранена');
+
+                if(!$model->resize($upload_directory, 426, 233))
+                    $model->addError('slider_teaser_image', 'Невозможно обработать изображение');
+            }
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
-			'model'=>$model,
+		$this->render('update', array(
+			'model' => $model,
 		));
 	}
 

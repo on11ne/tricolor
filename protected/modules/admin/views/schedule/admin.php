@@ -3,13 +3,13 @@
 /* @var $model Schedule */
 
 $this->breadcrumbs=array(
-	'Schedules'=>array('index'),
-	'Manage',
+	'Расписание' => array('index'),
+	'Управленис списком',
 );
 
 $this->menu=array(
-	array('label'=>'List Schedule', 'url'=>array('index')),
-	array('label'=>'Create Schedule', 'url'=>array('create')),
+	array('label'=>'Список сеансов', 'url'=>array('index')),
+	array('label'=>'Создать сеанс', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -26,14 +26,14 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Schedules</h1>
+<h1>Управление списком</h1>
 
 <p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+    Возможно использование операторов сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
+    или <b>=</b>).
 </p>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('Расширенный поиск','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -42,12 +42,20 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'schedule-grid',
-	'dataProvider'=>$model->search(),
+	'dataProvider' => $model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'item_id',
-		'hall_id',
+        array(
+            'name' => 'item',
+            'type' => 'raw',
+            'value' => '$data->item->title'
+        ),
+        array(
+            'name' => 'hall',
+            'type' => 'raw',
+            'value' => '$data->hall->title'
+        ),
 		'start_date_time',
 		array(
 			'class'=>'CButtonColumn',

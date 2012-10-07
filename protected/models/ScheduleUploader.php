@@ -44,7 +44,6 @@ class ScheduleUploader extends CActiveRecord
             $objReader->setLoadAllSheets();
             $objPHPExcel = $objReader->load($inputFileName);
 
-            $loadedSheetNames = $objPHPExcel->getSheetNames();
         } catch (Exception $ex) {
 
             $this->addError('filename', 'Не возможно обработать xls файл, проверьте формат');
@@ -52,56 +51,90 @@ class ScheduleUploader extends CActiveRecord
         }
 
 
-        foreach($loadedSheetNames as $loadedSheetName) {
+        if($this->type == 'schedule') {
 
-            $year = date("Y"); list($day, $month) = explode(".", $loadedSheetName);
-            if(!checkdate($month, $day, $year)) continue;
+            $loadedSheetNames = $objPHPExcel->getSheetNames();
 
-            $message = 'Результаты загрузки<br/>';
+            foreach($loadedSheetNames as $loadedSheetName) {
 
-            $objPHPExcel->setActiveSheetIndexByName($loadedSheetName);
+                $year = date("Y"); list($day, $month) = explode(".", $loadedSheetName);
+                if(!checkdate($month, $day, $year)) continue;
 
-            $hall_id = 1;
-            $time_id = 1;
-            foreach(array_merge(range('B', 'M'), range('O', 'Z')) as $letter) {
-                foreach(range(2, 97) as $number) {
+                $message = 'Результаты загрузки<br/>';
 
-                    $film_title = $objPHPExcel->getActiveSheet()->getCell($letter.$number)->getValue();
+                $objPHPExcel->setActiveSheetIndexByName($loadedSheetName);
 
-                    if(strlen($film_title) > 1) {
+                $hall_id = 1;
+                $time_id = 1;
+                foreach(array_merge(range('B', 'M'), range('O', 'Z')) as $letter) {
+                    foreach(range(2, 97) as $number) {
 
-                        $minutes_from_midnight = ($number - 2) * 15;
-                        $current_time = mktime(
-                            intval($minutes_from_midnight / 60), // hours
-                            intval($minutes_from_midnight % 60), // minutes
-                            0,
-                            $month,
-                            $day,
-                            $year
-                        );
+                        $film_title = $objPHPExcel->getActiveSheet()->getCell($letter.$number)->getValue();
 
-                        $item = Item::model()->find('title=:t', array(':t' => $film_title));
+                        if(strlen($film_title) > 1) {
 
-                        if(is_null($item)) {
+                            $minutes_from_midnight = ($number - 2) * 15;
+                            $current_time = mktime(
+                                intval($minutes_from_midnight / 60), // hours
+                                intval($minutes_from_midnight % 60), // minutes
+                                0,
+                                $month,
+                                $day,
+                                $year
+                            );
 
-                            $message .= 'Название фильма ' . $film_title . " не найдено<br/>";
-                        } else {
+                            $item = Item::model()->find('title=:t', array(':t' => $film_title));
 
-                            $schedule_item = new Schedule();
-                            $schedule_item->hall_id = $hall_id;
+                            if(is_null($item)) {
 
-                            $schedule_item->item_id = $item->id;
-                            $schedule_item->start_date_time = date("Y-m-d H:i:s", $current_time);
+                                $message .= 'Название фильма ' . $film_title . " не найдено<br/>";
+                            } else {
 
-                            if(!$schedule_item->save())
-                                $message .= 'Ошибка сохранения сеанса ' . var_export($schedule_item->getErrors(), true) . " не найдено<br/>";
+                                $schedule_item = new Schedule();
+                                $schedule_item->hall_id = $hall_id;
+
+                                $schedule_item->item_id = $item->id;
+                                $schedule_item->start_date_time = date("Y-m-d H:i:s", $current_time);
+
+                                if(!$schedule_item->save())
+                                    $message .= 'Ошибка сохранения сеанса ' . var_export($schedule_item->getErrors(), true) . " не найдено<br/>";
+                            }
                         }
+                        $time_id++;
                     }
-                    $time_id++;
+                    $hall_id++;
                 }
-                $hall_id++;
+            }
+        } elseif ($this->type == 'premieres') {
+
+            $objReader->setLoadSheetsOnly('Лист1');
+
+            $message = null;
+
+            for($number = 1; $number <= 31; $number++) {
+
+                $date = date('Y-m-d', PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet()->getCell('A'.$number)->getValue()));
+                $film_title = $objPHPExcel->getActiveSheet()->getCell('B'.$number)->getValue();
+
+                $item = Item::model()->find('title=:t', array(':t' => $film_title));
+
+                if(is_null($item)) {
+
+                    $message .= 'Название фильма ' . $film_title . " не найдено<br/>";
+                } else {
+
+                    $schedule_item = new SchedulePremiere();
+
+                    $schedule_item->item_id = $item->id;
+                    $schedule_item->start_date_time = $date;
+
+                    if(!$schedule_item->save())
+                        $message .= 'Ошибка сохранения сеанса ' . var_export($schedule_item->getErrors(), true) . " не найдено<br/>";
+                }
             }
         }
+
+
 
         Yii::app()->user->setFlash('message', $message);
 
@@ -116,8 +149,9 @@ class ScheduleUploader extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('filename', 'required'),
+			array('filename, type', 'required'),
 			array('filename', 'file', 'maxSize' => 3000000, 'types' => 'xls'),
+            array('type', 'in', 'range' => array('schedule', 'premieres')),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, filename, created', 'safe', 'on'=>'search'),
@@ -143,6 +177,7 @@ class ScheduleUploader extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'filename' => 'Таблица расписания',
+            'type' => 'Тип',
 			'created' => 'Создано',
 		);
 	}
@@ -160,6 +195,7 @@ class ScheduleUploader extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('filename',$this->filename,true);
+        $criteria->compare('type',$this->type,true);
 		$criteria->compare('created',$this->created,true);
 
 		return new CActiveDataProvider($this, array(
