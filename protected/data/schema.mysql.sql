@@ -1,152 +1,72 @@
-
--- ---
--- Globals
--- ---
-
--- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
--- SET FOREIGN_KEY_CHECKS=0;
-
--- ---
--- Table 'tbl_items'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_items`;
-		
-CREATE TABLE `tbl_items` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NOT NULL,
-  `teaser_image` VARCHAR(255) NOT NULL,
-  `index_teaser_image` VARCHAR(255) NOT NULL,
-  `teaser_text` MEDIUMTEXT NOT NULL,
-  `trailer` VARCHAR(255) NOT NULL,
-  `description` MEDIUMTEXT NOT NULL,
-  `order` TINYINT NOT NULL,
-  `created` TIMESTAMP NOT NULL,
-  PRIMARY KEY (`id`)
+create table tricolor.tbl_genres (
+  id int not null,
+  title varchar(255) not null,
+  primary key (id)
 );
 
--- ---
--- Table 'tbl_schedule'
--- 
--- ---
+create table tricolor.tbl_genres_items (
+  id int not null,
+  item_id int not null,
+  genre_id int not null,
+  primary key (id),
+  foreign key tbl_genres_items_ibfk_2 (genre_id) references tbl_genres(id),
+  foreign key tbl_genres_items_ibfk_1 (item_id) references tbl_items(id)
+);
+create index item_id on tricolor.tbl_genres_items (item_id);
+create index genre_id on tricolor.tbl_genres_items (genre_id);
 
-DROP TABLE IF EXISTS `tbl_schedule`;
-		
-CREATE TABLE `tbl_schedule` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `item_id` INT(10) NOT NULL,
-  `hall_id` INT NOT NULL,
-  `start_date_time` TIMESTAMP NOT NULL,
-  PRIMARY KEY (`id`)
+create table tricolor.tbl_halls (
+  id int not null,
+  title varchar(255) not null,
+  primary key (id)
 );
 
--- ---
--- Table 'tbl_genres'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_genres`;
-		
-CREATE TABLE `tbl_genres` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`)
+create table tricolor.tbl_items (
+  id int not null,
+  title varchar(255) not null,
+  teaser_image varchar(255) not null,
+  index_teaser_image varchar(255) not null,
+  teaser_text mediumtext(16777215) not null,
+  trailer varchar(255) not null,
+  description mediumtext(16777215) not null,
+  order tinyint not null,
+  created timestamp not null default CURRENT_TIMESTAMP,
+  slider_teaser_image varchar(255),
+  primary key (id),
+  foreign key tbl_items_ibfk_1 (id) references tbl_schedule_premiere(id)
 );
 
--- ---
--- Table 'tbl_halls'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_halls`;
-		
-CREATE TABLE `tbl_halls` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`)
+create table tricolor.tbl_migration (
+  version varchar(255) not null,
+  apply_time int,
+  primary key (version)
 );
 
--- ---
--- Table 'tbl_genres_items'
--- 
--- ---
+create table tricolor.tbl_schedule (
+  id int not null,
+  item_id int not null,
+  hall_id int not null,
+  start_date_time timestamp not null default CURRENT_TIMESTAMP,
+  primary key (id),
+  foreign key tbl_schedule_ibfk_1 (item_id) references tbl_items(id),
+  foreign key tbl_schedule_ibfk_2 (hall_id) references tbl_halls(id)
+);
+create index item_id on tricolor.tbl_schedule (item_id);
+create index hall_id on tricolor.tbl_schedule (hall_id);
 
-DROP TABLE IF EXISTS `tbl_genres_items`;
-		
-CREATE TABLE `tbl_genres_items` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `item_id` INT(10) NOT NULL,
-  `genre_id` INT(10) NOT NULL,
-  PRIMARY KEY (`id`)
+create table tricolor.tbl_schedule_premiere (
+  id int not null,
+  item_id int not null,
+  start_date_time date not null,
+  primary key (id),
+  foreign key tbl_schedule_premiere_ibfk_1 (id) references tbl_items(id)
 );
 
--- ---
--- Table 'tbl_schedule_uploader'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_schedule_uploader`;
-		
-CREATE TABLE `tbl_schedule_uploader` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `filename` VARCHAR(255) NOT NULL,
-  `type` TINYINT NOT NULL,
-  `created` TIMESTAMP NOT NULL,
-  PRIMARY KEY (`id`)
+create table tricolor.tbl_schedule_uploader (
+  id int not null,
+  filename varchar(255) not null,
+  created timestamp not null default CURRENT_TIMESTAMP,
+  type varchar(30),
+  primary key (id)
 );
 
--- ---
--- Table 'tbl_schedule_premieres'
--- 
--- ---
-
-DROP TABLE IF EXISTS `tbl_schedule_premieres`;
-		
-CREATE TABLE `tbl_schedule_premieres` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `item_id` INT(10) NOT NULL,
-  `start_date_time` DATE NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
--- ---
--- Foreign Keys 
--- ---
-
-ALTER TABLE `tbl_items` ADD FOREIGN KEY (id) REFERENCES `tbl_schedule_premieres` (`id`);
-ALTER TABLE `tbl_schedule` ADD FOREIGN KEY (item_id) REFERENCES `tbl_items` (`id`);
-ALTER TABLE `tbl_schedule` ADD FOREIGN KEY (hall_id) REFERENCES `tbl_halls` (`id`);
-ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (item_id) REFERENCES `tbl_items` (`id`);
-ALTER TABLE `tbl_genres_items` ADD FOREIGN KEY (genre_id) REFERENCES `tbl_genres` (`id`);
-
--- ---
--- Table Properties
--- ---
-
--- ALTER TABLE `tbl_items` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_schedule` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_genres` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_halls` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_genres_items` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_schedule_uploader` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `tbl_schedule_premieres` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- ---
--- Test Data
--- ---
-
--- INSERT INTO `tbl_items` (`id`,`title`,`teaser_image`,`index_teaser_image`,`teaser_text`,`trailer`,`description`,`order`,`created`) VALUES
--- ('','','','','','','','','');
--- INSERT INTO `tbl_schedule` (`id`,`item_id`,`hall_id`,`start_date_time`) VALUES
--- ('','','','');
--- INSERT INTO `tbl_genres` (`id`,`title`) VALUES
--- ('','');
--- INSERT INTO `tbl_halls` (`id`,`title`) VALUES
--- ('','');
--- INSERT INTO `tbl_genres_items` (`id`,`item_id`,`genre_id`) VALUES
--- ('','','');
--- INSERT INTO `tbl_schedule_uploader` (`id`,`filename`,`type`,`created`) VALUES
--- ('','','','');
--- INSERT INTO `tbl_schedule_premieres` (`id`,`item_id`,`start_date_time`) VALUES
--- ('','','');
